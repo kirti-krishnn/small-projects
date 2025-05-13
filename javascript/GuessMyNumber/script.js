@@ -28,7 +28,7 @@ btn_check.addEventListener('click', function () {
     console.log(highscore);
     label_highScore.textContent = highscore;
     document.querySelector('body').style.backgroundColor = ' #60b347';
-    guess_number.disabled = true;
+    document.querySelector('.guess').disabled = true;
     score = 20;
   } else {
     score = score - 1;
