@@ -24,7 +24,14 @@ function Counter() {
       <button onClick={() => setcount((s) => s - step)}>-</button>
       <span> Count:{`${count}`} </span>
       <button onClick={() => setcount((s) => s + step)}>+</button>
-      <p>{`${count} days from today is ${date.toDateString()}`}</p>
+      <p>
+        {count === 0
+          ? "Today is "
+          : count > 0
+          ? `${count} days from today is `
+          : `${count} days ago was `}
+        <span>{date.toDateString()}</span>
+      </p>
     </div>
   );
 }
