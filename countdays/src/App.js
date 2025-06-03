@@ -1,5 +1,4 @@
 import "./index.css";
-
 import { useState } from "react";
 
 function App() {
@@ -11,26 +10,45 @@ function App() {
 }
 
 function Counter() {
-  const [step, setstep] = useState(1);
-  const [count, setcount] = useState(0);
-  const date = new Date("may 20 2025");
-  date.setDate(date.getDate() + count);
+  const date = new Date("24-May-2025");
+
+  const [step, setStep] = useState(1);
+
+  const [counter, setCounter] = useState(0);
+
+  function handleDecrement() {
+    setStep((s) => s - 1);
+  }
+
+  function handleIncrement() {
+    setStep((s) => s + 1);
+  }
+
+  function handleDecreCounter() {
+    setCounter((c) => c - step);
+  }
+
+  function handleIncreCounter() {
+    setCounter((c) => c + step);
+  }
+  date.setDate(date.getDate() + counter);
+
   return (
     <div>
-      <button onClick={() => setstep((s) => s - 1)}>-</button>
-      <span> Step:{`${step}`} </span>
-      <button onClick={() => setstep((s) => s + 1)}>+</button>
-      <br></br>
-      <button onClick={() => setcount((s) => s - step)}>-</button>
-      <span> Count:{`${count}`} </span>
-      <button onClick={() => setcount((s) => s + step)}>+</button>
+      <div>
+        <button onClick={handleDecrement}>-</button>
+        <span> Step: {step} </span>
+        <button onClick={handleIncrement}>+</button>
+      </div>
+      <div>
+        <button onClick={handleDecreCounter}>-</button>
+        <span> Counter: {counter} </span>
+        <button onClick={handleIncreCounter}>+</button>
+      </div>
       <p>
-        {count === 0
-          ? "Today is "
-          : count > 0
-          ? `${count} days from today is `
-          : `${count} days ago was `}
-        <span>{date.toDateString()}</span>
+        {counter === 1
+          ? `Today is ${date.toDateString()}date`
+          : `After ${counter} days , the date is ${date.toDateString()}`}
       </p>
     </div>
   );
