@@ -1,17 +1,31 @@
 import "./App.css";
 import { useState } from "react";
 
-const initialItems = [
+/* const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
   { id: 2, description: "Socks", quantity: 12, packed: false },
-];
+]; */
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(el) {
+    setItems((items) => [...items, el]);
+  }
+
+  function handleTogglePacked(id) {
+    setItems((items) =>
+      items.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
+    );
+  }
+
   return (
     <div className="app">
       <Logo />
-      <AddForm />
-      <PackingList />
+      <AddForm onAddItems={handleAddItems} />
+      <PackingList items={items} onTogglePacked={handleTogglePacked} />
       <Stats />
     </div>
   );
@@ -21,19 +35,23 @@ function Logo() {
   return <h1>🌴Far Away 💼</h1>;
 }
 
-function AddForm() {
+function AddForm({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("1");
 
-  const newItem = { description, quantity, packed: false, id: Date.now() };
-
-  console.log(newItem);
   function handleSubmit(e) {
-    setDescription(description);
+    e.preventDefault();
+    if (!description) return;
+
+    const newItem = { description, quantity, packed: false, id: Date.now() };
+
+    onAddItems(newItem);
+    setDescription("");
+    setQuantity("1");
   }
 
   return (
-    <form className="add-form" onClick={handleSubmit}>
+    <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your Trip?</h3>
       <select
         name="quantity"
@@ -57,23 +75,29 @@ function AddForm() {
   );
 }
 
-function PackingList() {
+function PackingList({ items, onTogglePacked }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((el) => (
-          <Item item={el} />
+        {items.map((el) => (
+          <Item item={el} key={el.id} onTogglePacked={onTogglePacked} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onTogglePacked }) {
   return (
     <li>
-      <input type="checkbox" value={""}></input>
-      {item.quantity} {item.description}
+      <input
+        type="checkbox"
+        checked={item.packed}
+        onChange={() => onTogglePacked(item.id)}
+      ></input>
+      <span style={item.packed ? { textDecoration: "line-through" } : {}}>
+        {item.quantity} {item.description}
+      </span>
       <button style={{ color: "red" }}>X</button>
     </li>
   );
