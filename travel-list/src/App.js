@@ -21,11 +21,19 @@ function App() {
     );
   }
 
+  function handleDeleteItem(id) {
+    setItems((items) => items.filter((item) => item.id !== id));
+  }
+
   return (
     <div className="app">
       <Logo />
       <AddForm onAddItems={handleAddItems} />
-      <PackingList items={items} onTogglePacked={handleTogglePacked} />
+      <PackingList
+        items={items}
+        onTogglePacked={handleTogglePacked}
+        onDeleteItem={handleDeleteItem}
+      />
       <Stats />
     </div>
   );
@@ -75,19 +83,24 @@ function AddForm({ onAddItems }) {
   );
 }
 
-function PackingList({ items, onTogglePacked }) {
+function PackingList({ items, onTogglePacked, onDeleteItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((el) => (
-          <Item item={el} key={el.id} onTogglePacked={onTogglePacked} />
+          <Item
+            item={el}
+            key={el.id}
+            onTogglePacked={onTogglePacked}
+            onDeleteItem={onDeleteItem}
+          />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item, onTogglePacked }) {
+function Item({ item, onTogglePacked, onDeleteItem }) {
   return (
     <li>
       <input
@@ -98,7 +111,9 @@ function Item({ item, onTogglePacked }) {
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button style={{ color: "red" }}>X</button>
+      <button style={{ color: "red" }} onClick={() => onDeleteItem(item.id)}>
+        X
+      </button>
     </li>
   );
 }
