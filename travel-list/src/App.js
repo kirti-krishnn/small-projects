@@ -25,6 +25,10 @@ function App() {
     setItems((items) => items.filter((item) => item.id !== id));
   }
 
+  function handleClearList() {
+    setItems([]);
+  }
+
   return (
     <div className="app">
       <Logo />
@@ -33,8 +37,9 @@ function App() {
         items={items}
         onTogglePacked={handleTogglePacked}
         onDeleteItem={handleDeleteItem}
+        onClearList={handleClearList}
       />
-      <Stats />
+      <Stats items={items} />
     </div>
   );
 }
@@ -83,11 +88,27 @@ function AddForm({ onAddItems }) {
   );
 }
 
-function PackingList({ items, onTogglePacked, onDeleteItem }) {
+function PackingList({ items, onTogglePacked, onDeleteItem, onClearList }) {
+  const [sortBy, setSortBy] = useState("input");
+
+  let sortedItems = items;
+
+  if (sortBy === "input") sortedItems = items;
+  if (sortBy === "packed") {
+    sortedItems = items
+      .slice()
+      .sort((a, b) => Number(a.packed) - Number(b.packed));
+  }
+  if (sortBy === "description") {
+    sortedItems = items
+      .slice()
+      .sort((a, b) => a.description.localeCompare(b.description));
+  }
+
   return (
     <div className="list">
       <ul>
-        {items.map((el) => (
+        {sortedItems.map((el) => (
           <Item
             item={el}
             key={el.id}
@@ -96,6 +117,14 @@ function PackingList({ items, onTogglePacked, onDeleteItem }) {
           />
         ))}
       </ul>
+      <div className="actions">
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="input">Sort by Input Order</option>
+          <option value="packed">Sort by Packed</option>
+          <option value="description">Sort by Description</option>
+        </select>
+        <button onClick={onClearList}>Clear List</button>
+      </div>
     </div>
   );
 }
@@ -118,10 +147,22 @@ function Item({ item, onTogglePacked, onDeleteItem }) {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
+  const numItems = items.length;
+  const packedItems = items.filter((items) => items.packed).length;
+  const percentagePacked = (packedItems / numItems) * 100;
   return (
     <div className="stats">
-      <p>👜You have X items in your list and you have already packed X items</p>
+      {numItems === 0 ? (
+        <p> Add items to your list</p>
+      ) : percentagePacked === 100 ? (
+        <p>You are good to go. All things Packed. ✈️</p>
+      ) : (
+        <p>
+          👜You have {numItems} items in your list and you have already packed
+          {packedItems} items {percentagePacked.toFixed(2)}% ✈️
+        </p>
+      )}
     </div>
   );
 }
