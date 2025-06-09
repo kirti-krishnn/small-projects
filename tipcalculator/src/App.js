@@ -26,7 +26,7 @@ function App() {
         How much did your friend like the service?{" "}
       </SelectPercentage>
       <BillBreakUp tip={tip} bill={bill}></BillBreakUp>
-      <Reset handleReset={handleReset}></Reset>
+      <Reset handleReset={handleReset} bill={bill}></Reset>
     </div>
   );
 }
@@ -64,14 +64,16 @@ function SelectPercentage({ children, setPercentage, percentage }) {
 
 function BillBreakUp({ tip, bill }) {
   return (
-    <h2>
-      You pay ${bill + tip} (${bill} +${tip}){" "}
-    </h2>
+    bill && (
+      <h2>
+        You pay ${bill + tip} (${bill} +${tip})
+      </h2>
+    )
   );
 }
 
-function Reset({ handleReset }) {
-  return <button onClick={handleReset}>Reset</button>;
+function Reset({ handleReset, bill }) {
+  return bill && <button onClick={handleReset}>Reset</button>;
 }
 
 export default App;
