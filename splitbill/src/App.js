@@ -190,13 +190,15 @@ function App() {
   function handleSplitBill(amount) {
     console.log(selected.name);
     console.log(amount);
-    setFriends((friends) =>
+
+    selected.balance = selected.balance + amount;
+    /* setFriends((friends) =>
       friends.map((friend) =>
         friend.id === selected.id
           ? { ...friend, balance: friend.balance + amount }
           : friend
-      )
-    );
+      ) 
+    );*/
 
     setSelected(null);
   }
@@ -332,12 +334,16 @@ function FormSplit({ selected, onSplitBill }) {
   const [bill, setBill] = useState("");
   const [payBill, setPayBill] = useState("user");
   const [yourBill, setYourBill] = useState("");
-  const friendBill = bill ? bill - yourBill : "";
+  let friendBill = bill ? bill - yourBill : "";
 
   function handleSubmit() {
     if (!bill || !yourBill) return;
 
     onSplitBill(payBill === "user" ? friendBill : -yourBill);
+    setBill("");
+    setPayBill("user");
+    setYourBill("");
+    friendBill = "";
   }
 
   return (
