@@ -168,6 +168,14 @@ const initialFriends = [
   },
 ];
 
+function Button({ children, onClick }) {
+  return (
+    <button className="button" onClick={onClick}>
+      {children}
+    </button>
+  );
+}
+
 function App() {
   const [showAddFriend, setShowAddFriend] = useState(false);
   const [friends, setFriends] = useState(initialFriends);
@@ -258,9 +266,9 @@ function FriendList({
         ))}
       </ul>
       {showAddFriend && <AddFriend onAddFriends={onAddFriends} />}
-      <button className=" button" onClick={onShowAddFriend}>
+      <Button onClick={onShowAddFriend}>
         {showAddFriend ? `Close` : `Add Friend`}
-      </button>
+      </Button>
     </div>
   );
 }
@@ -277,9 +285,9 @@ function Friends({ friend, selected, onSelectedFriend }) {
           ? `You and ${friend.name} are even`
           : `you own ${friend.name} ${Math.abs(friend.balance)} \u00A3`}
       </p>
-      <button className="button" onClick={() => onSelectedFriend(friend)}>
+      <Button onClick={() => onSelectedFriend(friend)}>
         {selected?.id === friend.id ? `Close` : `Select`}
-      </button>
+      </Button>
     </li>
   );
 }
@@ -319,9 +327,7 @@ function AddFriend({ onAddFriends }) {
           value={img}
           onChange={(e) => setImg(e.target.value)}
         ></input>
-        <button className="button" type="submit">
-          Add
-        </button>
+        <Button>Add</Button>
       </form>
     </div>
   );
@@ -370,7 +376,7 @@ function FormSplit({ selected, onSplitBill }) {
           <option value="user">You</option>
           <option value="friend">{selected.name}</option>
         </select>
-        <button className="button">Split Bill</button>
+        <Button>Split Bill</Button>
       </form>
     )
   );
