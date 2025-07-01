@@ -60,48 +60,71 @@ const avgRuntime = average(watched.map((movie) => movie.runtime));
 function App() {
   return (
     <div>
-      <NavigationBar />
-      <Main />
+      <NavigationBar>
+        <NumResults movies={movies} />
+      </NavigationBar>
+      <Main>
+        <Box>
+          <List list={movies} />
+        </Box>
+        <Box>
+          <Summary />
+          <WatchedList watched={watched} />
+        </Box>
+      </Main>
     </div>
   );
 }
 
-function NavigationBar() {
+function NavigationBar({ children }) {
   return (
     <nav className="nav-bar">
-      <div className="logo">
-        <span role="img">🍿</span>
-        <h1>usePopCorn</h1>
-      </div>
-      <input type="text" placeholder="Search Movie" className="search"></input>
-      <p className="num-results">found 3 results</p>
+      <Logo />
+      <Search />
+      {children}
     </nav>
   );
 }
 
-function Main() {
+function Logo() {
   return (
-    <div className="main">
-      <div className="box">
-        <button className="btn-toggle">-</button>
-        <ul className="list">
-          {movies.map((movie) => (
-            <Movie movie={movie} key={movie.imdbID} />
-          ))}
-        </ul>
-      </div>
-      <div className="box">
-        <button className="btn-toggle">-</button>
-        <Summary />
-        <ul className="list">
-          {watched.map((movie) => (
-            <Watched movie={movie} key={movie.imdbID} />
-          ))}
-        </ul>
-      </div>
+    <div className="logo">
+      <span role="img">🍿</span>
+      <h1>usePopCorn</h1>
     </div>
   );
 }
+function Search() {
+  return (
+    <input type="text" placeholder="Search Movie" className="search"></input>
+  );
+}
+
+function NumResults({ movies }) {
+  return <p className="num-results">found {movies.length} results</p>;
+}
+
+function Main({ children }) {
+  return <div className="main">{children}</div>;
+}
+
+function Box({ children }) {
+  return (
+    <div className="box">
+      <button className="btn-toggle">-</button>
+      {children}
+    </div>
+  );
+}
+
+/* function WatchedBox({ children }) {
+  return (
+    <div className="box">
+      <button className="btn-toggle">-</button>
+      {children}
+    </div>
+  );
+} */
 
 function Summary() {
   return (
@@ -129,9 +152,29 @@ function Summary() {
   );
 }
 
+function List({ list }) {
+  return (
+    <ul className="list">
+      {list.map((movie) => (
+        <Movie movie={movie} key={movie.imdbID} />
+      ))}
+    </ul>
+  );
+}
+
+function WatchedList({ watched }) {
+  return (
+    <ul className="list">
+      {watched.map((movie) => (
+        <Watched movie={movie} key={movie.imdbID} />
+      ))}
+    </ul>
+  );
+}
+
 function Watched({ movie }) {
   return (
-    <li key={movie.imdbID}>
+    <li>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
