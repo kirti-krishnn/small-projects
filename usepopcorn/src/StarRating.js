@@ -17,13 +17,17 @@ const textStyle = {
   margin: "0",
 };
 
-export default function StarRating({ maxRating = 5, message = [] }) {
+export default function StarRating({
+  maxRating = 5,
+  message = [],
+  onSetRating,
+}) {
   const [rating, setRating] = useState(0);
   const [tempRating, setTempRating] = useState(0);
 
   function handleRating(rating, message) {
-    console.log(rating);
     setRating(rating);
+    onSetRating(rating);
   }
 
   return (
