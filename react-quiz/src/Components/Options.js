@@ -1,27 +1,18 @@
-export default function Options({ question, answer, dispatch }) {
-  const options = question.options;
-  const hasAnswered = answer !== null;
+function Options({ options, dispatch, answer, correctAnswer }) {
+  console.log(correctAnswer);
 
-  /**/
-
+  const hasAnswered = answer != null;
+  console.log(hasAnswered);
   return (
     <div className="options">
-      {options.map((option, i) => {
+      {options.map((option, index) => {
         return (
           <button
-            key={i}
-            className={`btn btn-option ${i === answer ? "answer" : ""} 
-            ${
-              hasAnswered
-                ? i === question.correctOption
-                  ? "correct"
-                  : "wrong "
-                : ""
+            key={index}
+            className={`btn btn-option ${answer === index ? "answer" : ""} ${
+              hasAnswered ? (index === correctAnswer ? "correct" : "wrong") : ""
             }`}
-            onClick={
-              () => dispatch({ type: "newAnswer", payload: i }) // dispatch the selected option index
-            }
-            disabled={hasAnswered} // disable buttons once answered
+            onClick={() => dispatch({ type: "NewAnswer", payload: index })}
           >
             {option}
           </button>
@@ -30,3 +21,5 @@ export default function Options({ question, answer, dispatch }) {
     </div>
   );
 }
+
+export default Options;

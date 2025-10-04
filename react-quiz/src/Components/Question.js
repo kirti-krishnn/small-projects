@@ -1,11 +1,9 @@
-import Options from "./Options";
-
-export default function Question({ questions, index, answer, dispatch }) {
-  const question = questions[index];
+function Question({ question }) {
   return (
     <div>
-      <h4>{questions[index].question}</h4>
-      <Options question={question} answer={answer} dispatch={dispatch} />
+      <h3>{question}</h3>
     </div>
   );
 }
+
+export default Question;
