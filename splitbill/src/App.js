@@ -218,7 +218,11 @@ function App() {
         selected={selected}
         onSelectedFriend={handleSelectedFriend}
       />
-      <FormSplit selected={selected} onSplitBill={handleSplitBill} />
+      <FormSplit
+        selected={selected}
+        onSplitBill={handleSplitBill}
+        key={selected?.id}
+      />
     </div>
   );
 }
