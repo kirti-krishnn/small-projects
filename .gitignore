@@ -1,0 +1,10 @@
+# dependencies & caches
+**/node_modules/
+**/.cache/
+# builds / coverage
+**/dist/
+**/build/
+**/coverage/
+# misc
+*.log
+.env*
