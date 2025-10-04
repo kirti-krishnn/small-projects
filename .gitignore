@@ -8,3 +8,10 @@
 # misc
 *.log
 .env*
+**/node_modules/
+**/.cache/
+**/dist/
+**/build/
+**/coverage/
+*.log
+.env*
