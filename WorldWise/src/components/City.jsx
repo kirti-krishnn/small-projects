@@ -1,5 +1,9 @@
 import styles from "./City.module.css";
 import ButtonBack from "./ButtonBack";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCities } from "../contexts/citiesContext";
+import { useEffect, useRef } from "react";
+import Spinner from "./Spinner";
 
 const formatDate = (date) =>
   new Intl.DateTimeFormat("en", {
@@ -10,20 +14,39 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function City() {
-  // TEMP DATA
-  const currentCity = {
-    cityName: "Lisbon",
-    emoji: "🇵🇹",
-    date: "2027-10-31T15:59:59.138Z",
-    notes: "My favorite city so far!",
-  };
+  const { id } = useParams();
+  const { getCity, currentCity, isLoading } = useCities();
+  console.log(id);
+
+  /* useEffect(() => {
+    getCity(id);
+  }, [id, getCity]); */
+
+  const getCityRef = useRef(getCity);
+  useEffect(() => {
+    getCityRef.current = getCity;
+  }, [getCity]);
+
+  // now only depend on `id`
+  useEffect(() => {
+    if (id) getCityRef.current(id);
+  }, [id]);
+
+  const navigate = useNavigate();
+
+  if (isLoading || !currentCity) return <Spinner />;
+
+  /* {
+    isLoading && <Spinner />;
+  } */
+  console.log(currentCity);
 
   const { cityName, emoji, date, notes } = currentCity;
 
   return (
     <div className={styles.city}>
       <div className={styles.row}>
-        <h6>City name</h6>
+        <h6>City name {id}</h6>
         <h3>
           <span>{emoji}</span> {cityName}
         </h3>
@@ -53,7 +76,7 @@ function City() {
       </div>
 
       <div>
-        <ButtonBack />
+        <ButtonBack onClick={() => navigate(-1)} />
       </div>
     </div>
   );
