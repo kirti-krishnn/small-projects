@@ -5,4 +5,9 @@ import eslint from "vite-plugin-eslint";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), eslint()],
+
+  server: {
+    https: false,
+    host: true,
+  },
 });

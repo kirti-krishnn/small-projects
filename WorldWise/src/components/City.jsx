@@ -1,8 +1,10 @@
 import styles from "./City.module.css";
-import ButtonBack from "./ButtonBack";
-import { useNavigate, useParams } from "react-router-dom";
+//import stylesButton from "./Button.module.css";
+//import { useNavigate } from "react-router-dom";
+import BackButton from "./BackButton";
 import { useCities } from "../contexts/citiesContext";
-import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import Spinner from "./Spinner";
 
 const formatDate = (date) =>
@@ -14,39 +16,35 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 function City() {
+  // TEMP DATA
+  /*const currentCity = {
+    cityName: "Lisbon",
+    emoji: "🇵🇹",
+    date: "2027-10-31T15:59:59.138Z",
+    notes: "My favorite city so far!",
+  }; */
+
   const { id } = useParams();
-  const { getCity, currentCity, isLoading } = useCities();
-  console.log(id);
 
-  /* useEffect(() => {
-    getCity(id);
-  }, [id, getCity]); */
+  const { currentCity, getCity, isLoading } = useCities();
 
-  const getCityRef = useRef(getCity);
-  useEffect(() => {
-    getCityRef.current = getCity;
-  }, [getCity]);
-
-  // now only depend on `id`
-  useEffect(() => {
-    if (id) getCityRef.current(id);
-  }, [id]);
-
-  const navigate = useNavigate();
-
-  if (isLoading || !currentCity) return <Spinner />;
-
-  /* {
-    isLoading && <Spinner />;
-  } */
-  console.log(currentCity);
+  useEffect(
+    function () {
+      getCity(id);
+    },
+    [id, getCity]
+  );
 
   const { cityName, emoji, date, notes } = currentCity;
+
+  console.log(cityName, emoji, date, notes);
+
+  if (isLoading) return <Spinner />;
 
   return (
     <div className={styles.city}>
       <div className={styles.row}>
-        <h6>City name {id}</h6>
+        <h6>City name</h6>
         <h3>
           <span>{emoji}</span> {cityName}
         </h3>
@@ -76,7 +74,16 @@ function City() {
       </div>
 
       <div>
-        <ButtonBack onClick={() => navigate(-1)} />
+        <BackButton />
+        {/* <button
+          className={`${"cta"} ${stylesButton.btn} ${stylesButton.back}`}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          &larr;Back
+        </button> */}
       </div>
     </div>
   );

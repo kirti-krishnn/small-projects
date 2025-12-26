@@ -1,26 +1,29 @@
-import styles from "./CityList.module.css";
-
-import Spinner from "./Spinner";
-import CityItem from "./CityItem";
-import Message from "./Message";
 import { useCities } from "../contexts/citiesContext";
+import CityItem from "./CityItem";
+import styles from "./CityList.module.css";
+import Message from "./Message";
 
 function CityList() {
-  const { cities, isLoading } = useCities();
-  console.log(cities);
-  if (!cities.length)
-    return <Message message="Add your first city by clicking on the map" />;
-  return (
-    <div>
-      {isLoading && <Spinner />}
-      {!isLoading && (
-        <ul className={styles.CityList}>
-          {cities.map((city) => (
-            <CityItem city={city} key={city.id} />
-          ))}
-        </ul>
-      )}
-    </div>
+  /*  console.log({ isLoading });
+  console.log({ cities }); */
+
+  const { cities } = useCities();
+
+  return cities.length === 0 ? (
+    <Message message="Start your list by clicking on the map 👉" />
+  ) : (
+    <ul className={styles.cityList}>
+      {cities.map((city) => (
+        <CityItem
+          name={city.cityName}
+          emoji={city.emoji}
+          date={city.date}
+          key={city.id}
+          id={city.id}
+          position={city.position}
+        />
+      ))}
+    </ul>
   );
 }
 
